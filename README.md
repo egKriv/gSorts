@@ -1,2 +1,4 @@
 # gSorts
-double_non-growingModules_bubbleHeap
+double
+non-growing modules
+bubble heap
