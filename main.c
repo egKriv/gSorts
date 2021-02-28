@@ -4,35 +4,56 @@
 #include <malloc.h>
 #include <stdlib.h>
 
-int cmps(double a, double b); // compares a and b. return -1 if b should be before a, 1 if a before b, 0 if no matterr
+
+int cmps(const void * val1, const void * val2); // compares a and b. return 1 if b should be before a, -1 if a before b, else 0
+int rev_cmps(const void * val1, const void * val2);
 void swap(double* a, double* b); // swap data in a and b
 double* gen_arr(int n, int type); // generate array of n doubles. type defines order: 1 - sorted, 2 - reverse sorted, 3 - unsorted
 void print_arr(int n, double* a); // prints array of n doubles
 double fRand(void); // generate random double
+
+
 int comparison_count = 0;
 int swap_count = 0;
 
+
 int main (void)
 {
-    int n = 10;
-    srand(2);
-    double *a = gen_arr(n, 3);
-    print_arr(n, a);
+    long long int t;
+    double *a;
+    int sizes[1] = {10}, i;
+    srand(time(&t));
+    for (i=0; i<1; i++)
+    {
+        a = gen_arr(sizes[0], 1);
+        print_arr(sizes[i], a);
+        a = gen_arr(sizes[0], 2);
+        print_arr(sizes[i], a);
+        a = gen_arr(sizes[0], 3);
+        print_arr(sizes[i], a);
+        a = gen_arr(sizes[0], 3);
+        print_arr(sizes[i], a);
+    }
     free(a);
     return 0;
 }
 
 
-int cmps(double a, double b)
+int cmps(const void * val1, const void * val2)
 {
     comparison_count++;
-    if (abs(a) > abs(b))
+    double a = *(double*) val1;
+    double b = *(double*) val2;
+    if (fabs(a) > fabs(b))
+        return -1;
+    if (fabs(a) < fabs(b))
         return 1;
-    if (abs(a) == abs(b))
-        return 0;
-    return -1;
+    return 0;
 }
-
+int rev_cmps(const void * val1, const void * val2)
+{
+    return -cmps(val1, val2);
+}
 void swap(double *a, double *b)
 {
     double x = a[0];
@@ -51,10 +72,17 @@ double* gen_arr(int n, int type)
         a[i] = fRand();
     }
     //sort if needed
-    if(type == 3)
+    int cont = comparison_count;
+    if(type == 2)
     {
-        return a;
+        qsort(a, n, sizeof(double), rev_cmps);
     }
+    if (type == 1)
+    {
+        qsort(a, n, sizeof(double), cmps);
+    }
+    comparison_count = cont;
+    return a;
     // here should be two ways more
     free(a); // just in case
     return NULL;
