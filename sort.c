@@ -26,7 +26,7 @@ int swap_count = 0;
 
 int main (void)
 {
-    long long int t;
+    long int t;
     double *a, *b, *c, *d;
     int sizes[1] = {10}, types[4]={1, 2, 3, 3}, i, j;
     srand(time(&t));
